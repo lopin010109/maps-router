@@ -27,7 +27,8 @@ async function parseAddresses() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `錯誤 (${res.status})`);
 
-    addresses = [...addresses, ...data.addresses];
+    const cleaned = data.addresses.map(a => a.replace(/\s+/g, ''));
+    addresses = [...addresses, ...cleaned];
     renderList();
     document.getElementById('textInput').value = '';
   } catch (e) {

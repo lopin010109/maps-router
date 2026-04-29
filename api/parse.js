@@ -31,6 +31,9 @@ export default async function handler(req, res) {
   );
 
   if (!geminiRes.ok) {
+    if (geminiRes.status === 429) {
+      return res.status(429).json({ error: '使用次數過多，請稍後再試' });
+    }
     const err = await geminiRes.json();
     return res.status(geminiRes.status).json({ error: err.error?.message || 'Gemini API error' });
   }
