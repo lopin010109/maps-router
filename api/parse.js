@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   const prompt = `從以下文字中抽取所有台灣地址，以 JSON 陣列格式回傳，每個元素是一個完整地址字串（不含編號、項目符號等非地址文字）。只回傳 JSON 陣列，不要其他說明文字。\n\n文字：\n${text}`;
 
   const geminiRes = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
