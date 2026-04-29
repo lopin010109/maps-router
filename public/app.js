@@ -85,11 +85,16 @@ function clearAll() {
 function buildMapsUrl(addrs) {
   const useFirst = document.getElementById('useFirstAsOrigin').checked;
   const parts = addrs.map(a => encodeURIComponent(a)).join('/');
-  // useFirst=true  → maps/dir/A/B/C  (第一個地址當出發點)
-  // useFirst=false → maps/dir//A/B/C (空白 = 當前位置出發)
-  const path = useFirst ? parts : `/${parts}`;
+  const origin = useFirst ? '' : 'My+Location';
+  const path = origin ? `${origin}/${parts}` : parts;
   const webUrl = `https://maps.google.com/maps/dir/${path}/`;
-  return `intent://maps.google.com/maps/dir/${path}/#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+  const intentUrl = `intent://maps.google.com/maps/dir/${path}/#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+
+  const a = document.createElement('a');
+  a.href = intentUrl;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 function openMaps() {
@@ -97,7 +102,7 @@ function openMaps() {
     showToast('至少需要 1 個地址');
     return;
   }
-  window.location.href = buildMapsUrl(addresses);
+  buildMapsUrl(addresses);
 }
 
 function addRow() {
@@ -133,7 +138,7 @@ function openMapsManual() {
     showToast('至少需要 1 個地址');
     return;
   }
-  window.location.href = buildMapsUrl(addrs);
+  buildMapsUrl(addrs);
 }
 
 function escapeHtml(str) {
