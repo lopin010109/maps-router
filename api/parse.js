@@ -7,6 +7,9 @@ export default async function handler(req, res) {
   if (!text || typeof text !== 'string') {
     return res.status(400).json({ error: 'text is required' });
   }
+  if (text.length > 5000) {
+    return res.status(400).json({ error: '文字過長，請限制在 5000 字以內' });
+  }
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {

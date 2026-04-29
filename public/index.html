@@ -16,9 +16,27 @@
       <h1>路線規劃</h1>
     </header>
 
+    <label class="checkbox-row">
+      <input type="checkbox" id="useFirstAsOrigin">
+      <span>指定第一個地址為出發點</span>
+    </label>
+
     <div class="card">
       <textarea id="textInput" placeholder="貼上任意文字，AI 會自動抽取地址&#10;&#10;例如：LINE 訊息、表格、清單..."></textarea>
       <button class="primary-btn" id="parseBtn" onclick="parseAddresses()">解析地址</button>
+    </div>
+
+    <div class="divider">或手動輸入</div>
+
+    <div class="card">
+      <div id="manualInputs">
+        <div class="manual-row">
+          <input type="text" class="manual-input" placeholder="輸入地址">
+          <button class="row-del-btn" onclick="removeRow(this)">×</button>
+          <button class="row-add-btn" onclick="addRow()">+</button>
+        </div>
+      </div>
+      <button class="maps-btn manual-maps-btn" onclick="openMapsManual()">開啟 Google Maps 路線 →</button>
     </div>
 
     <div id="listSection" style="display:none">

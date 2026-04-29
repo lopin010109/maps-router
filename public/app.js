@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
   }
+  updateDeleteBtns();
 });
 
 async function parseAddresses() {
@@ -81,17 +82,58 @@ function clearAll() {
   renderList();
 }
 
+function buildMapsUrl(addrs) {
+  const useFirst = document.getElementById('useFirstAsOrigin').checked;
+  const parts = addrs.map(a => encodeURIComponent(a)).join('/');
+  // useFirst=true  → maps/dir/A/B/C  (第一個地址當出發點)
+  // useFirst=false → maps/dir//A/B/C (空白 = 當前位置出發)
+  const path = useFirst ? parts : `/${parts}`;
+  const webUrl = `https://maps.google.com/maps/dir/${path}/`;
+  return `intent://maps.google.com/maps/dir/${path}/#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+}
+
 function openMaps() {
-  if (addresses.length < 2) {
-    showToast('至少需要 2 個地址');
+  if (addresses.length < 1) {
+    showToast('至少需要 1 個地址');
     return;
   }
+  window.location.href = buildMapsUrl(addresses);
+}
 
-  const parts = addresses.map(a => encodeURIComponent(a)).join('/');
-  const webUrl = `https://maps.google.com/maps/dir/${parts}/`;
-  const intentUrl = `intent://maps.google.com/maps/dir/${parts}/#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+function addRow() {
+  const container = document.getElementById('manualInputs');
+  const row = document.createElement('div');
+  row.className = 'manual-row';
+  row.innerHTML = `
+    <input type="text" class="manual-input" placeholder="輸入地址">
+    <button class="row-del-btn" onclick="removeRow(this)">×</button>
+    <button class="row-add-btn" onclick="addRow()">+</button>
+  `;
+  container.appendChild(row);
+  row.querySelector('input').focus();
+  updateDeleteBtns();
+}
 
-  window.location.href = intentUrl;
+function removeRow(btn) {
+  btn.closest('.manual-row').remove();
+  updateDeleteBtns();
+}
+
+function updateDeleteBtns() {
+  const rows = document.querySelectorAll('.manual-row');
+  rows.forEach(row => {
+    row.querySelector('.row-del-btn').style.visibility = rows.length === 1 ? 'hidden' : 'visible';
+  });
+}
+
+function openMapsManual() {
+  const inputs = document.querySelectorAll('.manual-input');
+  const addrs = Array.from(inputs).map(i => i.value.trim()).filter(v => v);
+  if (addrs.length < 1) {
+    showToast('至少需要 1 個地址');
+    return;
+  }
+  window.location.href = buildMapsUrl(addrs);
 }
 
 function escapeHtml(str) {
