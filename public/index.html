@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#4285F4">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="路線規劃">
+  <title>路線規劃</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>路線規劃</h1>
+    </header>
+
+    <div class="card">
+      <textarea id="textInput" placeholder="貼上任意文字，AI 會自動抽取地址&#10;&#10;例如：LINE 訊息、表格、清單..."></textarea>
+      <button class="primary-btn" id="parseBtn" onclick="parseAddresses()">解析地址</button>
+    </div>
+
+    <div id="listSection" style="display:none">
+      <div class="list-header">
+        <span id="listCount"></span>
+        <button class="clear-btn" onclick="clearAll()">清除全部</button>
+      </div>
+      <div id="addressList" class="address-list"></div>
+      <button class="maps-btn" onclick="openMaps()">開啟 Google Maps 路線 →</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
