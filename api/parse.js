@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Server not configured' });
   }
 
-  const prompt = `從以下文字中抽取所有台灣地址，以 JSON 陣列格式回傳，每個元素是一個完整地址字串（不含編號、項目符號等非地址文字）。只回傳 JSON 陣列，不要其他說明文字。\n\n文字：\n${text}`;
+  const prompt = `從以下文字中抽取所有台灣的地點（包含地址、地標、景點、店名、建築名稱等），以 JSON 陣列格式回傳，每個元素是一個地點字串（不含編號、項目符號等非地點文字）。只回傳 JSON 陣列，不要其他說明文字。\n\n文字：\n${text}`;
 
   const geminiRes = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
