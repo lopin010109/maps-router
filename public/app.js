@@ -88,10 +88,17 @@ function buildMapsUrl(addrs) {
   const origin = useFirst ? '' : 'My+Location';
   const path = origin ? `${origin}/${parts}` : parts;
   const webUrl = `https://maps.google.com/maps/dir/${path}/`;
-  const intentUrl = `intent://maps.google.com/maps/dir/${path}/#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
 
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const a = document.createElement('a');
-  a.href = intentUrl;
+  a.target = '_blank';
+
+  if (isIOS) {
+    a.href = webUrl;
+  } else {
+    a.href = `intent://maps.google.com/maps/dir/${path}/#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+  }
+
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
