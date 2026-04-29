@@ -89,14 +89,19 @@ function buildMapsUrl(addrs) {
   const path = origin ? `${origin}/${parts}` : parts;
   const webUrl = `https://maps.google.com/maps/dir/${path}/`;
 
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const ua = navigator.userAgent;
+  const isAndroid = /Android/.test(ua);
+  const isIOS = /iPad|iPhone|iPod/.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
   const a = document.createElement('a');
   a.target = '_blank';
 
-  if (isIOS) {
-    a.href = webUrl;
-  } else {
+  if (isAndroid) {
     a.href = `intent://maps.google.com/maps/dir/${path}/#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+  } else {
+    // iOS、桌機（Mac、Windows、Linux）一律開網頁版
+    a.href = webUrl;
   }
 
   document.body.appendChild(a);
