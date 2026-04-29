@@ -91,10 +91,14 @@ function buildMapsUrl(addrs) {
 
   const ua = navigator.userAgent;
   const isAndroid = /Android/.test(ua);
+  const isIOS = /iPad|iPhone|iPod/.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
   if (isAndroid) {
     const intentUrl = `intent://maps.google.com/maps/dir/${path}/#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
     window.location.href = intentUrl;
+  } else if (isIOS) {
+    window.location.href = webUrl;
   } else {
     window.open(webUrl, '_blank');
   }
